@@ -1,5 +1,8 @@
 #compute ratios of the sum of the logs of primes to the log of the sum of primes
 
+from math import sqrt
+from math import log
+
 listOfPrimes = []
 counter = 2
 sumlog = 0
