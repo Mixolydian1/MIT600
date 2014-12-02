@@ -23,13 +23,13 @@ def isPrime(x):
 					
 	return isprime
 
-listOfPrimes = []
-counter = 2
+listOfPrimes = [2]
+counter = 3
 
 while len(listOfPrimes) < 1000:
 	if isPrime(counter):
 		listOfPrimes.append(counter)
-	counter = counter + 1	
+	counter = counter + 2	
 	
 print listOfPrimes.pop()
 	
