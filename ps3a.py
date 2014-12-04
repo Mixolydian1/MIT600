@@ -22,8 +22,17 @@ def countSubStringMatch (target, key):
 	return instances
 
 def countSubStringMatchRecursive (target, key):
-	return "a"
+	instances = 0
+	if find(target,key) == -1:
+		return 0
+	else:
+		print "found one"
+		print "now checking " + target[find(target,key):]
+		a = raw_input("pause")
+		return 1 + countSubStringMatchRecursive(target[find(target,key)+len(key):],key)
 
 
 print countSubStringMatch (target, key)
+
+print countSubStringMatchRecursive(target,key)
 
