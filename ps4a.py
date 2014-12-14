@@ -27,7 +27,7 @@ def testNestEggFixed():
     growthRate = 15
     years      = 5
     savingsRecord = nestEggFixed(salary, save, growthRate, years)
-    print savingsRecord
+    return savingsRecord
     # Output should have values close to:
     # [1000.0, 2150.0, 3472.5, 4993.375, 6742.3812499999995]
 
