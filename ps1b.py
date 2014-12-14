@@ -6,7 +6,8 @@ from math import log
 listOfPrimes = []
 counter = 2
 sumlog = 0
-logsum = 0
+n = 5000
+
 
 def testIfPrime(x):
 	isprime = True
@@ -21,7 +22,7 @@ def testIfPrime(x):
 					isprime = False
                 return isprime
 
-while len(listOfPrimes) < 1000:
+while len(listOfPrimes) < n:
 	if testIfPrime(counter):
 		listOfPrimes.append(counter)
 	counter = counter + 1	
@@ -29,10 +30,11 @@ while len(listOfPrimes) < 1000:
 	
 for j in listOfPrimes:
 	sumlog = sumlog + log(j)
-	logsum = logsum + j
-logsum = log(logsum)
-
+	
+# Chebyshev's result is that the sum of the log of primes up to some prime p divided by p approaches log p.
 print sumlog
-print logsum
+print n
+print sumlog/n
+print log(n)
 
 	
