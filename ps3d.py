@@ -8,53 +8,29 @@ definition
 
 from string import *
 
-target3 = 'abcxabdxadcxdbc'
+target3 = 'abdxabcxadcxdbc'
 key14 = 'abc'
 
-#definion from previous section of problem set
-def subStringMatchExact(target,key):
-	indices = []
-	for x in range(0,len(target)-len(key)+1):
-		if target[x:x+len(key)] == key:
-			indices.append(x)
-	return tuple(indices)
-
-#defintion from previous section of problem set
-def constrainedMatchPair(match1, match2, match3, lenKey):
-	answer = []
-	for x in match1:
-		for y in match2:
-			if x+lenKey+1==y:
-				for z in match3:
-					if x+lenKey != z:
-						answer.append(x)
-	return tuple(answer)
-
-
-#defintion for which the problem set is requiring to complete
 def subStringMatchExactlyOneSub(target, key):
-	allAnswers = ()
-    	for miss in range(0,len(key)):
-        	# miss picks location for missing element
-        	# key1 and key2 are substrings to match
-		#offkey is the substring to NOT match
-        	key1 = key[:miss]
-        	key2 = key[miss+1:]
-		offkey = key[miss]
-        	print 'breaking key',key,'into',key1,"and",key2
-		print 'do not match',offkey
-        	# match# are tuples of locations of start of matches
-        	match1 = subStringMatchExact(target,key1)
-        	match2 = subStringMatchExact(target,key2)
-		match3 = subStringMatchExact(target,offkey)
-        	# need to filter pairs to decide which are correct
-        	filtered = constrainedMatchPair(match1,match2,match3,len(key1))
-        	allAnswers = allAnswers + filtered
-        	print 'left key match',match1
-        	print 'right key match2',match2
-		print 'offkey match',match3
-        	print 'possible matches for',key1,key2,'start at',filtered
-		print 'filtered',filtered
-	return allAnswers
+	answers = ()
+	for x in range (0,len(target)-len(key)+1):
+		#section of the string to test
+		selection = target[x:x+len(key)]
+		for y in range(0,len(key)):
+			#divide they key into 3 strings
+			midKey = key[y]
+			leftKey = key[:y]
+			rightKey = key[y+1:]
+
+			if leftKey == selection[:y]:
+				print "\ttest left good", selection[:y]
+				if midKey != selection[y]:
+					print "\ttest middle good", selection[y]
+					if rightKey == selection[y+1:]:
+						print "\ttest right good", selection[y+1:]
+						print "found at ", str(x)
+						answers = answers + (x,)
+	return answers
+
 
 print subStringMatchExactlyOneSub(target3, key14)
