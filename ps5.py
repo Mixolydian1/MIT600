@@ -221,7 +221,7 @@ def play_hand(hand, word_list):
         print "Total Score: ", total_score
         current_input = raw_input("Enter a word or a \".\" to indicate that you are finished: ")
         if current_input == ".":
-            exit()
+            return
         elif is_valid_word (current_input, hand, word_list):
                 hand = update_hand(hand, current_input)
                 word_score = get_word_score(current_input, HAND_SIZE)
@@ -250,25 +250,21 @@ def play_game(word_list):
 
     * If the user inputs anything else, ask them again.
     """
-    # TO DO ...
-    print "play_game not implemented."         # delete this once you've completed Problem #4
-    play_hand(deal_hand(HAND_SIZE), word_list) # delete this once you've completed Problem #4
-    
-    ## uncomment the following block of code once you've completed Problem #4
-#    hand = deal_hand(HAND_SIZE) # random init
-#    while True:
-#        cmd = raw_input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ')
-#        if cmd == 'n':
-#            hand = deal_hand(HAND_SIZE)
-#            play_hand(hand.copy(), word_list)
-#            print
-#        elif cmd == 'r':
-#            play_hand(hand.copy(), word_list)
-#            print
-#        elif cmd == 'e':
-#            break
-#        else:
-#            print "Invalid command."
+       
+    hand = deal_hand(HAND_SIZE) # random init
+    while True:
+        cmd = raw_input('Enter n to deal a new hand, r to replay the last hand, or e to end game: ')
+        if cmd == 'n':
+            hand = deal_hand(HAND_SIZE)
+            play_hand(hand.copy(), word_list)
+            print
+        elif cmd == 'r':
+            play_hand(hand.copy(), word_list)
+            print
+        elif cmd == 'e':
+            break
+        else:
+            print "Invalid command."
 
 #
 # Build data structures used for entire session and play game
