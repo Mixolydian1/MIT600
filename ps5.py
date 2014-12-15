@@ -147,7 +147,9 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-    # TO DO ...
+    for letter in word:
+        hand[letter] = hand[letter] - 1
+    return hand
 
 #
 # Problem #3: Test word validity
