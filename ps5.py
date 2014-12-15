@@ -147,9 +147,12 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
+  
+
+    candidate = hand
     for letter in word:
-        hand[letter] = hand[letter] - 1
-    return hand
+        candidate[letter] = candidate.get(letter, 0) - 1
+    return candidate
 
 #
 # Problem #3: Test word validity
@@ -164,7 +167,14 @@ def is_valid_word(word, hand, word_list):
     hand: dictionary (string -> int)
     word_list: list of lowercase strings
     """
-    # TO DO ...
+    candidate = hand
+    if word in word_list:
+        for key in update_hand(candidate,word):
+            if candidate[key] < 0:
+                return False
+        return True
+    else:
+        return False
 
 #
 # Problem #4: Playing a hand
