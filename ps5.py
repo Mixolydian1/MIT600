@@ -149,10 +149,12 @@ def update_hand(hand, word):
     """
   
 
-    candidate = hand
+    newHand = {}
+    for key in hand:
+        newHand[key] =  hand.get(key,0)
     for letter in word:
-        candidate[letter] = candidate.get(letter, 0) - 1
-    return candidate
+        newHand[letter] = newHand[letter] - 1
+    return newHand
 
 #
 # Problem #3: Test word validity
@@ -167,10 +169,13 @@ def is_valid_word(word, hand, word_list):
     hand: dictionary (string -> int)
     word_list: list of lowercase strings
     """
-    candidate = hand
+  
     if word in word_list:
-        for key in update_hand(candidate,word):
-            if candidate[key] < 0:
+        newHand = {}
+        for key in hand:
+            newHand[key] =  hand.get(key,0)
+        for key in newHand:
+            if newHand[key] < 0:
                 return False
         return True
     else:
@@ -207,8 +212,20 @@ def play_hand(hand, word_list):
       hand: dictionary (string -> int)
       word_list: list of lowercase strings
     """
-    # TO DO ...
-    print "play_hand not implemented." # replace this with your code...
+    
+
+    current_input = None
+    while not current_input == ".":
+        display_hand(hand)
+        current_input = raw_input("Enter a word or a \".\" to indicate that you are finished: ")
+        if current_input == ".":
+            exit()
+        elif is_valid_word (current_input, hand, word_list):
+                hand = update_hand(hand, current_input)
+                print current_input, "has earned", get_word_score(current_input, HAND_SIZE)
+        else:
+            print "Word is invalid. Please try again."
+    
 
 #
 # Problem #5: Playing a game
