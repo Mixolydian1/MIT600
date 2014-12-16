@@ -52,6 +52,8 @@ def get_word_score(word, n):
     Letters are scored as in Scrabble; A is worth 1, B is
     worth 3, C is worth 3, D is worth 2, E is worth 1, and so on.
 
+    
+
     word: string (lowercase letters)
     returns: int >= 0
     """
@@ -61,6 +63,10 @@ def get_word_score(word, n):
     for letter in word:
         score = score + SCRABBLE_LETTER_VALUES[letter]
     return score
+
+def get_time_score(score,total_time):
+    ## The player's score is penalized for one thousanth of a point for every hundreth of a second.
+    return score - float(int(total_time*100))/1000
 
 def display_hand(hand):
     """
@@ -149,6 +155,14 @@ def is_valid_word(word, hand, word_list):
     else:
         return False
 
+def is_hand_empty(hand):
+    for key in hand:
+        if hand[key] > 0:
+            return False
+        elif hand[key] < 0:
+            print "****ERROR: negative letters****"
+    return True
+
 def play_hand(hand, word_list):
     """
     Allows the user to play the given hand, as follows:
@@ -180,19 +194,31 @@ def play_hand(hand, word_list):
     
     total_score = 0
     current_input = None
-    while not current_input == ".":
+    while True:
         display_hand(hand)
-        print "Total Score: ", total_score
-        current_input = raw_input("Enter a word or a \".\" to indicate that you are finished: ")
+        start_time = time.time()
+        current_input = raw_input("Enter a word or enter a \".\" to indicate that you are finished: ")
+        end_time = time.time()
+        # Calculte time precision hundreths of seconds.
+        total_time = float(int((end_time - start_time)*100))/100  
+        
         if current_input == ".":
-            return
+               break
         elif is_valid_word (current_input, hand, word_list):
                 hand = update_hand(hand, current_input)
                 word_score = get_word_score(current_input, HAND_SIZE)
+                print "\"",current_input, "\" has earned", word_score, "base points."
+                print "It took", total_time, "seconds to think of this word."
+                ## The player's score is penalized for one thousanth of a point for every hundreth of a second.
+                word_score = word_score - total_time/10
+                print "Points this round:", word_score
                 total_score = total_score + word_score
-                print current_input, "has earned", word_score
+                print "Total Score: ", total_score
         else:
             print "Word is invalid. Please try again."
+        if is_hand_empty(hand):
+            break
+    return
     
 
 def play_game(word_list):
@@ -225,6 +251,7 @@ def play_game(word_list):
             break
         else:
             print "Invalid command."
+    return        
 
 #
 # Build data structures used for entire session and play game
