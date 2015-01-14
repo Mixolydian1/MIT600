@@ -89,7 +89,7 @@ def display_hand(hand):
 def deal_hand(n):
     """
     Returns a random hand containing n lowercase letters.
-    At least n/3 the letters in the hand should be VOWELS.
+    n/3 of the letters in the hand should be VOWELS.
 
     Hands are represented as dictionaries. The keys are
     letters and the values are the number of times the
@@ -186,6 +186,8 @@ def play_hand(hand, word_list, time_limit):
     * The hand finishes when there are no more unused letters.
       The user can also finish playing the hand by inputing a single
       period (the string '.') instead of a word.
+
+    * If the user takes too long to enter a word, the round is over.  
 
     * The final score is displayed.
 
