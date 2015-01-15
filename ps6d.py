@@ -244,6 +244,9 @@ def play_hand(hand, word_list, time_limit):
     slow_hand = hand
     fast_hand = hand
 
+    slow_time_limit = time_limit
+    fast_time_limit = time_limit
+
     total_score = 0
     current_input = None
     while True:
@@ -255,7 +258,7 @@ def play_hand(hand, word_list, time_limit):
         total_time = float(int((end_time - start_time)*100))/100  
         if current_input == "":
             break
-        if total_time > time_limit:
+        if total_time > slow_time_limit:
             print "Your *slow* computer's response took too long!"
             print "Total *slow* Score:", total_score
             break
@@ -265,9 +268,9 @@ def play_hand(hand, word_list, time_limit):
             print "\"",current_input, "\" has earned", word_score, "base points."
             print "It took", total_time, "seconds to think of this word."
             word_score = word_score - total_time/10
-            time_limit = time_limit - total_time
+            slow_time_limit = time_limit - total_time
             print "Points this round: ", word_score
-            print "Time remaining:", time_limit
+            #print "Time remaining:", slow_time_limit
             total_score = total_score + word_score
             print "Total *slow* Score:", total_score
 
@@ -282,7 +285,7 @@ def play_hand(hand, word_list, time_limit):
         total_time = float(int((end_time - start_time)*100))/100  
         if current_input == "":
             break
-        if total_time > time_limit:
+        if total_time > fast_time_limit:
             print "Your *fast* computer's response took too long!"
             print "Total Score:", total_score
             break
@@ -292,9 +295,9 @@ def play_hand(hand, word_list, time_limit):
             print "\"",current_input, "\" has earned", word_score, "base points."
             print "It took", total_time, "seconds to think of this word."
             word_score = word_score - total_time/10
-            time_limit = time_limit - total_time
+            fast_time_limit = time_limit - total_time
             print "Points this round: ", word_score
-            print "Time remaining:", time_limit
+            #print "Time remaining:", fast_time_limit
             total_score = total_score + word_score
             print "Total *fast* Score:", total_score        
 
