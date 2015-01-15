@@ -36,12 +36,19 @@ def get_words_to_points(word_list):
         points_dict[word] = get_word_score(word,HAND_SIZE)
     return points_dict
 
-def get_word_rearrangements():
-    return
+def get_word_rearrangements(word_list):
+    '''
+    Returns a dict that maps every rearragned word to a word in the scrabble dictionary.
+    '''
+    rearrange_dict = {}
+    for word in word_list:
+        rearrange_dict[''.join(sorted(word))] = word
+
+    return rearrange_dict
 
 def get_time_limit(points_dict, k):
     """
-    Return the time limit for the computer player as a function of the multiplyer k
+    Returns the time limit for the computer player as a function of the multiplyer k
     """
     start_time = time.time()
     for word in points_dict:
