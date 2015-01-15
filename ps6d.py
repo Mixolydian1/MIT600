@@ -9,8 +9,8 @@ from itertools import combinations
 VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
-HAND_SIZE = 7
-TIME_MULTIPLIER = 10
+HAND_SIZE = 200
+TIME_MULTIPLIER = 100
 SCRABBLE_LETTER_VALUES = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
 }
@@ -225,9 +225,9 @@ def pick_best_word_faster(hand):
     """
     combs = []
     hand_string = get_string_hand(hand)
-    for x in range(1, len(hand_string)+1):
+    for x in reversed(range(1, len(hand_string)+1)):
         for y in combinations(hand_string, x):
-            combs.append(y)
+            combs.append("".join(y))
     
     best_score = 0
     best_word = ""
@@ -241,24 +241,26 @@ def play_hand(hand, word_list, time_limit):
     """
     
     """
-    
+    slow_hand = hand
+    fast_hand = hand
+
     total_score = 0
     current_input = None
     while True:
-        display_hand(hand)
+        display_hand(slow_hand)
         start_time = time.time()
-        current_input = pick_best_word(hand)
+        current_input = pick_best_word(slow_hand)
         end_time = time.time()
         # Calculte time precision hundreths of seconds.
         total_time = float(int((end_time - start_time)*100))/100  
         if current_input == "":
             break
         if total_time > time_limit:
-            print "Your computer's response took too long!"
-            print "Total Score:", total_score
+            print "Your *slow* computer's response took too long!"
+            print "Total *slow* Score:", total_score
             break
         else:
-            hand = update_hand(hand, current_input)
+            slow_hand = update_hand(slow_hand, current_input)
             word_score = get_word_score(current_input, HAND_SIZE)
             print "\"",current_input, "\" has earned", word_score, "base points."
             print "It took", total_time, "seconds to think of this word."
@@ -267,7 +269,35 @@ def play_hand(hand, word_list, time_limit):
             print "Points this round: ", word_score
             print "Time remaining:", time_limit
             total_score = total_score + word_score
+            print "Total *slow* Score:", total_score
+
+    total_score = 0
+    current_input = None
+    while True:
+        display_hand(fast_hand)
+        start_time = time.time()
+        current_input = pick_best_word(fast_hand)
+        end_time = time.time()
+        # Calculte time precision hundreths of seconds.
+        total_time = float(int((end_time - start_time)*100))/100  
+        if current_input == "":
+            break
+        if total_time > time_limit:
+            print "Your *fast* computer's response took too long!"
             print "Total Score:", total_score
+            break
+        else:
+            fast_hand = update_hand(fast_hand, current_input)
+            word_score = get_word_score(current_input, HAND_SIZE)
+            print "\"",current_input, "\" has earned", word_score, "base points."
+            print "It took", total_time, "seconds to think of this word."
+            word_score = word_score - total_time/10
+            time_limit = time_limit - total_time
+            print "Points this round: ", word_score
+            print "Time remaining:", time_limit
+            total_score = total_score + word_score
+            print "Total *fast* Score:", total_score        
+
     return
     
 
