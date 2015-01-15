@@ -225,7 +225,11 @@ def pick_best_word_faster(hand):
     """
     combs = []
     hand_string = get_string_hand(hand)
-    for x in reversed(range(1, len(hand_string)+1)):
+    max_length = 8
+    if len(hand_string < 8):
+        max_length = len(hand_string)
+
+    for x in reversed(range(1, max-length+1)):
         for y in combinations(hand_string, x):
             combs.append("".join(y))
     
@@ -241,8 +245,13 @@ def play_hand(hand, word_list, time_limit):
     """
     
     """
+    display_hand(hand)
+
     slow_hand = hand
     fast_hand = hand
+
+    slow_answers = []
+    fast_answers = []
 
     slow_time_limit = time_limit
     fast_time_limit = time_limit
@@ -250,7 +259,7 @@ def play_hand(hand, word_list, time_limit):
     total_score = 0
     current_input = None
     while True:
-        display_hand(slow_hand)
+        #display_hand(slow_hand)
         start_time = time.time()
         current_input = pick_best_word(slow_hand)
         end_time = time.time()
@@ -277,7 +286,7 @@ def play_hand(hand, word_list, time_limit):
     total_score = 0
     current_input = None
     while True:
-        display_hand(fast_hand)
+        #display_hand(fast_hand)
         start_time = time.time()
         current_input = pick_best_word(fast_hand)
         end_time = time.time()
@@ -352,3 +361,16 @@ if __name__ == '__main__':
     print "get_time_limit returned:", time_limit
     play_game(word_list, time_limit)
 
+"""
+Response to part #5:
+
+Let the size of word_list be w.
+Let the size of the hand be n.
+The maximum length of an acceptable answer is 8 letters.
+
+The complexity of pick_best_word is on the order of w*n/8
+
+The complexity of pick_best_word_faster is on the order of sum of binomial coefficients of n choose 1 to 8, therefore n^2... 
+
+
+"""
