@@ -4,6 +4,7 @@
 import random
 import string
 import time
+from itertools import combinations
 
 VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
@@ -143,6 +144,19 @@ def deal_hand(n):
         
     return hand
 
+def get_string_hand(hand):
+    """
+    Returns the alphabetized string version of a hand (dict).
+    """
+    string_hand = ""
+
+    for letter in hand:
+        for x in range(0,hand[letter]):
+            string_hand = string_hand + letter
+    string_hand = "".join(sorted(string_hand))
+    return string_hand
+
+
 def update_hand(hand, word):
     """
     Assumes that 'hand' has all the letters in word.
@@ -204,7 +218,24 @@ def pick_best_word(hand):
     return best_word   
 
 def pick_best_word_faster(hand):
-    return    
+    """
+    given a STRING hand, RETURNS the word with the highest score
+
+    combs is the list of alphabetized combinations of hand
+    """
+    combs = []
+    hand_string = get_string_hand(hand)
+    for x in range(1, len(hand_string)+1):
+        for y in combinations(hand_string, x):
+            combs.append(y)
+    
+    best_score = 0
+    best_word = ""
+    for comb in combs:
+            if pointsdict[rearrange_dict[comb]] > best_score:
+                best_score = pointsdict[rearrange_dict[comb]]
+                best_word = comb
+    return best_word 
 
 def play_hand(hand, word_list, time_limit):
     """
@@ -282,6 +313,7 @@ def play_game(word_list, time_limit):
 
 if __name__ == '__main__':
     word_list = load_words()
+    rearrange_dict = get_word_rearrangements(word_list)
     points_dict = get_words_to_points(word_list)
     time_limit = get_time_limit(points_dict, TIME_MULTIPLIER)
     print "get_time_limit returned:", time_limit
