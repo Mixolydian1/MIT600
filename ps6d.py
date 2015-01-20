@@ -368,9 +368,9 @@ Let the size of word_list be w.
 Let the size of the hand be n.
 The maximum length of an acceptable answer is 8 letters.
 
-The complexity of pick_best_word is on the order of w*n/8
+The complexity of pick_best_word O(w) linear.
 
-The complexity of pick_best_word_faster is on the order of sum of binomial coefficients of n choose 1 to 8, therefore n^2... 
+The complexity of pick_best_word_faster is on the order of sum of binomial coefficients of n choose 1 to 8, therefore O(n^2) polynomial. 
 
 
 """
