@@ -2,10 +2,8 @@
 #
 # Intelligent Course Advisor
 #
-# Name:
-# Collaborators:
-# Time:
-#
+# Name: Adam Capulong
+
 
 import time
 
@@ -27,13 +25,14 @@ def loadSubjects(filename):
 
     # The following sample code reads lines from the specified file and prints
     # each one.
+
+    subjects_dict = {}
     inputFile = open(filename)
     for line in inputFile:
-        print line
-
-    # TODO: Instead of printing each line, modify the above to parse the name,
-    # value, and work of each subject and create a dictionary mapping the name
-    # to the (value, work).
+        line = line.strip()
+        line_list = line.split(",")
+        subjects_dict[line_list[0]] = (int(line_list[2]), int(line_list[1]))
+    return subjects_dict
 
 def printSubjects(subjects):
     """
@@ -189,3 +188,5 @@ def dpTime():
 #
 # TODO: write here your observations regarding dpAdvisor's performance and
 # how its performance compares to that of bruteForceAdvisor.
+
+print loadSubjects(SUBJECT_FILENAME)
