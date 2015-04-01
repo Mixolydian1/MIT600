@@ -7,8 +7,9 @@
 
 import time
 
-SUBJECT_FILENAME = "subjects.txt"
+SUBJECT_FILENAME = "subjects2.txt"
 VALUE, WORK = 0, 1
+MAXWORK = 55
 
 #
 # Problem 1: Building A Subject Dictionary
@@ -23,15 +24,13 @@ def loadSubjects(filename):
     returns: dictionary mapping subject name to (value, work)
     """
 
-    # The following sample code reads lines from the specified file and prints
-    # each one.
-
     subjects_dict = {}
     inputFile = open(filename)
     for line in inputFile:
         line = line.strip()
         line_list = line.split(",")
-        subjects_dict[line_list[0]] = (int(line_list[2]), int(line_list[1]))
+        subjects_dict[line_list[0]] = (int(line_list[1]), int(line_list[2]))
+
     return subjects_dict
 
 def printSubjects(subjects):
@@ -41,7 +40,7 @@ def printSubjects(subjects):
     """
     totalVal, totalWork = 0,0
     if len(subjects) == 0:
-        return 'Empty SubjectList'
+        return 'Empty Subject List'
     res = 'Course\tValue\tWork\n======\t====\t=====\n'
     subNames = subjects.keys()
     subNames.sort()
@@ -99,7 +98,61 @@ def greedyAdvisor(subjects, maxWork, comparator):
     comparator: function taking two tuples and returning a bool
     returns: dictionary mapping subject name to (value, work)
     """
-    # TODO...
+
+    greedy_result = {}
+
+    subjectList = subjects.keys()
+
+    # print "initializing subjectList", subjectList
+
+    if len(subjectList) < 2:
+            raise ValueError
+    else:
+        toBeSortedList = []
+        for subject in subjectList:
+            toBeSortedList.append([subject])
+
+    # print "toBeSortedList", toBeSortedList        
+
+    def mergeSort(subjectList, comparator):
+        while len(subjectList) > 1:
+            
+            a = subjectList.pop(0)
+            b = subjectList.pop(0)
+            c = []
+
+            #print "subjectList", subjectList
+            #print "a", a, str(len(a))
+            #print "b", b, str(len(b))
+
+            while len(a) > 0 and len(b) > 0:
+                
+                #print "comparator",comparator(subjects[a[0]],subjects[b[0]])
+
+                if comparator(subjects[a[0]],subjects[b[0]]):
+                    c.append(b[0])
+                    b.pop(0)
+                else:
+                    c.append(a[0])
+                    a.pop(0)
+                
+                #print "c", c
+                #time.sleep(10)
+            while len(a) > 0:
+                c.append(a[0])
+                a.pop(0)
+            while len(b) > 0:
+                c.append(b[0])
+                b.pop(0)
+            subjectList.append(c)
+
+        return subjectList[0]
+
+    sortedList = mergeSort(toBeSortedList,comparator)
+    print "sortedList", sortedList
+    for subject in sortedList:
+        greedy_result[subject] = subjects[subject]
+    return greedy_result
 
 def bruteForceAdvisor(subjects, maxWork):
     """
@@ -189,4 +242,4 @@ def dpTime():
 # TODO: write here your observations regarding dpAdvisor's performance and
 # how its performance compares to that of bruteForceAdvisor.
 
-print loadSubjects(SUBJECT_FILENAME)
+printSubjects(greedyAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK,cmpValue))
