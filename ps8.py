@@ -7,9 +7,9 @@
 
 import time
 
-SUBJECT_FILENAME = "subjects2.txt"
+SUBJECT_FILENAME = "subjects.txt"
 VALUE, WORK = 0, 1
-MAXWORK = 25
+MAXWORK = 12
 
 #
 # Problem 1: Building A Subject Dictionary
@@ -149,13 +149,13 @@ def greedyAdvisor(subjects, maxWork, comparator):
         return subjectList[0]
 
     sortedList = mergeSort(toBeSortedList,comparator)
-    print "sortedList", sortedList
+    #print "sortedList", sortedList
 
     work = 0
     for subject in reversed(sortedList):
-        print "testing", subject
+        #print "testing", subject
         if work + subjects[subject][WORK] < maxWork:
-            print "accumulated work", str(work)
+            #print "accumulated work", str(work)
             work = work + subjects[subject][WORK]
             greedy_result[subject] = subjects[subject]
         
@@ -183,6 +183,7 @@ def bruteForceAdvisor(subjects, maxWork):
 def bruteForceAdvisorHelper(subjects, maxWork, i, bestSubset, bestSubsetValue,
                             subset, subsetValue, subsetWork):
     # Hit the end of the list.
+    #print "bruteForceAdvisorHelper called"
     if i >= len(subjects):
         if bestSubset == None or subsetValue > bestSubsetValue:
             # Found a new best.
@@ -212,12 +213,29 @@ def bruteForceTime():
     Runs tests on bruteForceAdvisor and measures the time required to compute
     an answer.
     """
-    # TODO...
+    #startTime = time.time()
+    #printSubjects(greedyAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK,cmpValue))
+    #endTime = time.time()
+    #print "Greedy Advisor executed in", str(endTime - startTime), "\n"
+
+
+    startTime = time.time()
+    printSubjects(bruteForceAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK))
+    endTime = time.time()
+    print "Brute Force executed in ", str(endTime - startTime)
+    return
 
 # Problem 3 Observations
 # ======================
 #
-# TODO: write here your observations regarding bruteForceTime's performance
+# The program does not finish within minutes, even when the maximum schedule 
+# workload is set to the maximum workload of any one course (MAXWORK = 20).
+
+# Table of  MAXWORK          execution time in seconds
+#           10               25 
+#           11               61   
+#           12               146 
+
 
 #
 # Problem 4: Subject Selection By Dynamic Programming
@@ -249,5 +267,6 @@ def dpTime():
 # TODO: write here your observations regarding dpAdvisor's performance and
 # how its performance compares to that of bruteForceAdvisor.
 
-printSubjects(greedyAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK,cmpValue))
-printSubjects(bruteForceAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK))
+
+#printSubjects(greedyAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK,cmpValue))
+bruteForceTime()
