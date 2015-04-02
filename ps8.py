@@ -9,7 +9,7 @@ import time
 
 SUBJECT_FILENAME = "subjects2.txt"
 VALUE, WORK = 0, 1
-MAXWORK = 55
+MAXWORK = 25
 
 #
 # Problem 1: Building A Subject Dictionary
@@ -100,7 +100,6 @@ def greedyAdvisor(subjects, maxWork, comparator):
     """
 
     greedy_result = {}
-
     subjectList = subjects.keys()
 
     # print "initializing subjectList", subjectList
@@ -115,6 +114,7 @@ def greedyAdvisor(subjects, maxWork, comparator):
     # print "toBeSortedList", toBeSortedList        
 
     def mergeSort(subjectList, comparator):
+        # returns a list of course names from least to greatest as ordered by the comparator
         while len(subjectList) > 1:
             
             a = subjectList.pop(0)
@@ -150,8 +150,15 @@ def greedyAdvisor(subjects, maxWork, comparator):
 
     sortedList = mergeSort(toBeSortedList,comparator)
     print "sortedList", sortedList
-    for subject in sortedList:
-        greedy_result[subject] = subjects[subject]
+
+    work = 0
+    for subject in reversed(sortedList):
+        print "testing", subject
+        if work + subjects[subject][WORK] < maxWork:
+            print "accumulated work", str(work)
+            work = work + subjects[subject][WORK]
+            greedy_result[subject] = subjects[subject]
+        
     return greedy_result
 
 def bruteForceAdvisor(subjects, maxWork):
@@ -243,3 +250,4 @@ def dpTime():
 # how its performance compares to that of bruteForceAdvisor.
 
 printSubjects(greedyAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK,cmpValue))
+printSubjects(bruteForceAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK))
