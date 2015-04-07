@@ -10,7 +10,7 @@ import time
 
 SUBJECT_FILENAME = "subjects.txt"
 VALUE, WORK = 0, 1
-MAXWORK = 10
+MAXWORK = 100
 
 #
 # Problem 1: Building A Subject Dictionary
@@ -138,6 +138,7 @@ def greedyAdvisor(subjects, maxWork, comparator):
                 
                 #print "c", c
                 #time.sleep(10)
+                
             while len(a) > 0:
                 c.append(a[0])
                 a.pop(0)
@@ -241,7 +242,7 @@ def bruteForceTime():
 
 
     startTime = time.time()
-    printSubjects(bruteForceAdvisor(loadSubjects(SUBJECT_FILENAME),MAXWORK))
+    printSubjects(bruteForceAdvisor(loadSubjects(SUBJECT_FILENAME), MAXWORK))
     endTime = time.time()
     print "Brute Force Method executed in ", str(endTime - startTime)
     return
@@ -271,49 +272,60 @@ def dpAdvisor(subjects, maxWork):
     maxWork: int >= 0
     returns: dictionary mapping subject name to (value, work)
     """
-    print "Dynamic Programming Method\n"
-    nameList = subjects.keys()
-    tupleList = subjects.values()
+    print "Dynamic Programming Method Using Decision Tree\n"
+    work_list = []
+    value_list = []
+    key_list = []
+    for each in subjects:
+        work_list.append(subjects[each][WORK])
+        value_list.append(subjects[each][VALUE])
+        key_list.append(each)
+
+
+
+    # Build optimal list of courses to take.
     memo = {}
-    #print tupleList
-    bestSubset, bestSubsetValue = \
-            dpAdvisorHelper(tupleList, maxWork, 0, None, None, [], 0, 0, memo)
+    rec_list = []
+    value, rec_list = dpAdvisorHelper(work_list, value_list, len(work_list)-1, maxWork, memo)
+
+    # Build dictionary from list.
     outputSubjects = {}
-    for i in bestSubset:
-        outputSubjects[nameList[i]] = tupleList[i]
+    for each in rec_list:
+        outputSubjects[key_list[each]] = (value_list[each], work_list[each])
     return outputSubjects
 
-def dpAdvisorHelper(subjects, maxWork, i, bestSubset, bestSubsetValue,
-                            subset, subsetValue, subsetWork, memo):    
-    print memo
-    if str(subset) in memo:
-        return memo[str(subset)]
-    else:    
+def dpAdvisorHelper(w, v, i, aW, memo):    
+    #print memo
 
-        # Hit the end of the list.         
-        if i >= len(subjects):
-            if bestSubset == None or subsetValue > bestSubsetValue:
-                # Found a new best.
-                return subset[:], subsetValue
+
+    if (i, aW) in memo:
+        return memo[(i, aW)]
+    else:
+        ## Leaf/Bottom of the tree case decision
+        if i == 0:
+            if w[i] < aW:
+                memo[(i,aW)] = v[i], [i]
+                return v[i],[i]
             else:
-                # Keep the current best.
-                return bestSubset, bestSubsetValue
-        else:
-            s = subjects[i]
-            if True:  
-                # Try including subjects[i] in the current working subset.
-                if subsetWork + s[WORK] <= maxWork:
-                    subset.append(i)
-                    bestSubset, bestSubsetValue = dpAdvisorHelper(subjects,
-                            maxWork, i+1, bestSubset, bestSubsetValue, subset,
-                            subsetValue + s[VALUE], subsetWork + s[WORK], memo)
-                    memo[str(subset)] = bestSubset, bestSubsetValue
-                    subset.pop()
-                bestSubset, bestSubsetValue = dpAdvisorHelper(subjects,
-                        maxWork, i+1, bestSubset, bestSubsetValue, subset,
-                        subsetValue, subsetWork, memo)
-                memo[str(subset)] = bestSubset, bestSubsetValue
-            return bestSubset, bestSubsetValue
+                memo[(i,aW)] = 0, []
+                return 0,[]
+    ## Calculate with and without i branches
+    without_i, course_list = dpAdvisorHelper(w,v,i-1,aW,memo)
+    if w[i] > aW:
+        memo[(i,aW)] = without_i, course_list
+        return without_i, course_list
+    else:
+        with_i, course_list_temp = dpAdvisorHelper(w, v, i-1, aW - w[i], memo)
+        with_i += v[i]
+    ## Take the branch with the higher value
+    if with_i > without_i:
+        i_value = with_i
+        course_list = [i] + course_list_temp
+    else:
+        i_value = without_i
+    ## Add this value calculation to the memo
+    memo[(i,aW)] = i_value, course_list
+    return i_value, course_list
 
 #
 # Problem 5: Performance Comparison
@@ -333,10 +345,16 @@ def dpTime():
 # Problem 5 Observations
 # ======================
 #
-# TODO: write here your observations regarding dpAdvisor's performance and
-# how its performance compares to that of bruteForceAdvisor.
+# Table of  MAXWORK          execution time in seconds
+#           10               0.0036 
+#           11               0.00436115264893
+#           12               0.00421500205994
+#           25               0.00968194007874
+#           50               0.0175640583038
+#           100              0.0394089221954
+# The time savings are readily apparent.
 
 subjects = loadSubjects(SUBJECT_FILENAME)
 #printSubjects(greedyAdvisor(subjects,MAXWORK,cmpValue))
-bruteForceTime()
-#dpTime()
+#bruteForceTime()
+dpTime()
