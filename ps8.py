@@ -301,7 +301,7 @@ def dpAdvisorHelper(w, v, i, aW, memo):
     if (i, aW) in memo:
         return memo[(i, aW)]
     else:
-        ## Leaf/Bottom of the tree case decision
+        # Base case of decision tree
         if i == 0:
             if w[i] < aW:
                 memo[(i,aW)] = v[i], [i]
@@ -309,21 +309,21 @@ def dpAdvisorHelper(w, v, i, aW, memo):
             else:
                 memo[(i,aW)] = 0, []
                 return 0,[]
-    ## Calculate with and without i branches
-    without_i, course_list = dpAdvisorHelper(w,v,i-1,aW,memo)
+    # Calculate with and without i branches
+    without_i, course_list = dpAdvisorHelper(w, v, i-1, aW, memo)
     if w[i] > aW:
         memo[(i,aW)] = without_i, course_list
         return without_i, course_list
     else:
         with_i, course_list_temp = dpAdvisorHelper(w, v, i-1, aW - w[i], memo)
         with_i += v[i]
-    ## Take the branch with the higher value
+    # Take the branch with the higher value
     if with_i > without_i:
         i_value = with_i
         course_list = [i] + course_list_temp
     else:
         i_value = without_i
-    ## Add this value calculation to the memo
+    # Add this value calculation to the memo
     memo[(i,aW)] = i_value, course_list
     return i_value, course_list
 
