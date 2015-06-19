@@ -55,7 +55,7 @@ class Circle(Shape):
 #
 
 class Triangle(Shape):
-    def __init__(self, h, b):
+    def __init__(self, b, h):
         """
         h: height length of triangle
         b: base length of triange
@@ -66,9 +66,9 @@ class Triangle(Shape):
         """
         Returns area of triangle.
         """
-        return self.h * self.b
+        return 0.5 * self.h * self.b
     def __str__(self):
-        return "Triangle with height" + str(self.h) + "and base" + str(self.b)
+        return "Triangle with height " + str(self.h) + " and base " + str(self.b)
     def __eq__(self, other):
         return type(other) == Triangle and self.h == other.h and self.b == other.b
 
@@ -78,34 +78,52 @@ class Triangle(Shape):
 ## TO DO: Fill in the following code skeleton according to the
 ##    specifications.
 
-class ShapeSet:
-    def __init__(self, shapeList):
+class ShapeSet(object):
+    def __init__(self):
         """
         Initialize any needed variables
         """
-        
-        self.shapeList = shapeList
+
+        self.shapeList = []
+
     def addShape(self, sh):
         """
         Add shape sh to the set; no two shapes in the set may be
         identical
         sh: shape to be added
         """
-        ## TO DO
+        foundMatch = False
+        for shape in self.shapeList:
+            if shape.__eq__(sh):
+                foundMatch = True
+        if foundMatch == False:
+            self.shapeList.append(sh)
+
     def __iter__(self):
         """
         Return an iterator that allows you to iterate over the set of
         shapes, one shape at a time
         """
-        ## TO DO
+        return iter(self.shapeList)
+
     def __str__(self):
         """
         Return the string representation for a set, which consists of
         the string representation of each shape, categorized by type
         (circles, then squares, then triangles)
         """
-        ## TO DO
-        
+        response = ""
+        for shape in self.shapeList:
+            if type(shape) == Circle:
+                response = response + shape.__str__() + "\n"
+        for shape in self.shapeList:
+            if type(shape) == Square:
+                response = response + shape.__str__() + "\n"
+        for shape in self.shapeList:
+            if type(shape) == Triangle:
+                response = response + shape.__str__() + "\n"
+        return response         
+                
 #
 # Problem 3: Find the largest shapes in a ShapeSet
 #
@@ -115,6 +133,24 @@ def findLargest(shapes):
        largest area.
     shapes: ShapeSet
     """
+    largestShapes = []
+    currentLargestAreaValue = 0
+    for shape in shapes:
+        #print "TESTING " + shape.__str__()
+        if shape.area() > currentLargestAreaValue:
+            #print "found shape of bigger area w/ a value of " + str(shape.area) + " from shape " + shape.__str__()
+            largestShapes = []
+            currentLargestAreaValue = shape.area()
+            largestShapes.append(shape.__str__())
+        elif shape.area() == currentLargestAreaValue:
+            #print "found shape of equal area w/ a value of " + str(shape.area) + " from shape " + shape.__str__()
+            largestShapes.append(shape.__str__())
+        else:
+            continue
+    
+    return tuple(largestShapes)
+
+
     ## TO DO
 
 #
@@ -129,7 +165,36 @@ def readShapesFromFile(filename):
     inputFile = open(filename)
     inputFileList = []
     for line in inputFile:
-        inputFileList.append(line)
+        inputFileList.append(line.split(","))
 
-    ## TO DO
+    shapeSet = ShapeSet()
+    for line in inputFileList:
+        if line[0] == "circle":
+            shapeSet.addShape(Circle(line[1]))
+        elif line[0] == "square":
+            shapeSet.addShape(Square(line[1]))
+        elif line[0] == "triangle":
+            shapeSet.addShape(Triangle(line[1],line[2]))
+        else:
+            print "[-] Attempted to add an undefined shape"
 
+    return shapeSet
+
+
+
+triangle1 = Triangle(1.1,2.2)
+#print triangle1.__str__()
+triangle2 = Triangle(1.1,2.2)
+#print triangle1.__eq__(triangle2)
+#print type(triangle1) == Triangle
+
+shapeSet = readShapesFromFile(INPUT_FILENAME)
+
+
+#print shapeSet.__str__()
+"""
+for shape in shapeSet:
+    print shape.__str__()
+    print shape.area()
+"""
+print type(findLargest(shapeSet))
