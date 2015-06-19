@@ -1,10 +1,10 @@
 # 6.00 Problem Set 9
 #
-# Name:
-# Collaborators:
-# Time:
+# Name: Adam Capulong
 
 from string import *
+
+INPUT_FILENAME = "shapes.txt"
 
 class Shape(object):
     def area(self):
@@ -53,7 +53,24 @@ class Circle(Shape):
 #
 # Problem 1: Create the Triangle class
 #
-## TO DO: Implement the `Triangle` class, which also extends `Shape`.
+
+class Triangle(Shape):
+    def __init__(self, h, b):
+        """
+        h: height length of triangle
+        b: base length of triange
+        """
+        self.h = float(h)
+        self.b = float(b)
+    def area(self):
+        """
+        Returns area of triangle.
+        """
+        return self.h * self.b
+    def __str__(self):
+        return "Triangle with height" + str(self.h) + "and base" + str(self.b)
+    def __eq__(self, other):
+        return type(other) == Triangle and self.h == other.h and self.b == other.b
 
 #
 # Problem 2: Create the ShapeSet class
@@ -62,11 +79,12 @@ class Circle(Shape):
 ##    specifications.
 
 class ShapeSet:
-    def __init__(self):
+    def __init__(self, shapeList):
         """
         Initialize any needed variables
         """
-        ## TO DO
+        
+        self.shapeList = shapeList
     def addShape(self, sh):
         """
         Add shape sh to the set; no two shapes in the set may be
@@ -108,5 +126,10 @@ def readShapesFromFile(filename):
     Creates and returns a ShapeSet with the shapes found.
     filename: string
     """
+    inputFile = open(filename)
+    inputFileList = []
+    for line in inputFile:
+        inputFileList.append(line)
+
     ## TO DO
 
