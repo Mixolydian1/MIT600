@@ -141,17 +141,17 @@ def findLargest(shapes):
             #print "found shape of bigger area w/ a value of " + str(shape.area) + " from shape " + shape.__str__()
             largestShapes = []
             currentLargestAreaValue = shape.area()
-            largestShapes.append(shape.__str__())
+            largestShapes.append(shape)
         elif shape.area() == currentLargestAreaValue:
             #print "found shape of equal area w/ a value of " + str(shape.area) + " from shape " + shape.__str__()
-            largestShapes.append(shape.__str__())
+            largestShapes.append(shape)
         else:
             continue
     
     return tuple(largestShapes)
 
 
-    ## TO DO
+
 
 #
 # Problem 4: Read shapes from a file into a ShapeSet
@@ -187,6 +187,7 @@ triangle1 = Triangle(1.1,2.2)
 triangle2 = Triangle(1.1,2.2)
 #print triangle1.__eq__(triangle2)
 #print type(triangle1) == Triangle
+circle1 = Circle(19.4)
 
 shapeSet = readShapesFromFile(INPUT_FILENAME)
 
@@ -197,4 +198,8 @@ for shape in shapeSet:
     print shape.__str__()
     print shape.area()
 """
-print type(findLargest(shapeSet))
+for shape in findLargest(shapeSet):
+    print shape.__str__()
+print circle1
+print findLargest(shapeSet)[0] is circle1
+print findLargest(shapeSet)[0].__eq__(circle1)
