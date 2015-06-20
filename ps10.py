@@ -41,8 +41,8 @@ def getWordScore(word):
     score = 0
     for ch in word:
         score += SCRABBLE_LETTER_VALUES[ch]
-    if len(word) == HAND_SIZE:
-        score += 50
+    #if len(word) == HAND_SIZE:
+    #    score += 50
     return score
 
 #
@@ -167,7 +167,7 @@ class Player(object):
         postcondition: This player object is initialized
         """
         self.points = 0.
-        self.idNum = idNum
+        self.idNum = int(idNum)
         self.hand = hand
     def getHand(self):
         """
@@ -175,7 +175,8 @@ class Player(object):
 
         returns: the Hand object associated with this player.
         """
-        # TODO
+        return self.hand
+
     def addPoints(self, points):
         """
         Add points to this player's total score.
@@ -184,14 +185,17 @@ class Player(object):
 
         postcondition: this player's total score is increased by points
         """
-        # TODO
+        self.points += points
+        return
+
     def getPoints(self):
         """
         Return this player's total score.
 
         returns: A float specifying this player's score
         """
-        # TODO
+        return self.points
+
     def getIdNum(self):
         """
         Return this player's ID number (either 1 for player 1 or
@@ -199,7 +203,8 @@ class Player(object):
 
         returns: An integer specifying this player's ID number.
         """
-        # TODO
+        return self.idNum
+
     def __cmp__(self, other):
         """
         Compare players by their scores.
@@ -208,7 +213,13 @@ class Player(object):
         -1 if this player's score is less than other player's score, and 0 if
         they're equal.
         """
-        # TODO
+        if self.getPoints() > other.getPoints():
+            return 1
+        elif self.getPoints() < other.getPoints():
+            return -1
+        else:
+            return 0
+
     def __str__(self):
         """
         Represent this player as a string
