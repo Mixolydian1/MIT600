@@ -69,6 +69,7 @@ class Hand(object):
                 initialHandDict[x] = initialHandDict.get(x, 0) + 1
         self.initialSize = handSize
         self.handDict = initialHandDict
+
     def update(self, word):
         """
         Remove letters in word from this hand.
@@ -76,7 +77,16 @@ class Hand(object):
         word: The word (a string) to remove from the hand
         postcondition: Letters in word are removed from this hand
         """
-        # TODO
+        newHandDict = {}
+        playedWord = getFrequencyDict(word)
+        for key in self.handDict:
+            if key in playedWord:
+                newHandDict[key] = self.handDict[key] - playedWord[key]
+            else:
+                newHandDict[key] = self.handDict[key]
+        self.handDict = newHandDict        
+        return
+
     def containsLetters(self, letters):
         """
         Test if this hand contains the characters required to make the input
@@ -85,14 +95,24 @@ class Hand(object):
         returns: True if the hand contains the characters to make up letters,
         False otherwise
         """
-        # TODO
+        playedWord = getFrequencyDict(letters)
+        for key in self.handDict:
+            if key in playedWord:
+                if self.handDict[key] - playedWord[key] < 0:
+                    return False
+        return True            
+
     def isEmpty(self):
         """
         Test if there are any more letters left in this hand.
 
         returns: True if there are no letters remaining, False otherwise.
         """
-        # TODO
+        for key in self.handDict:
+            if self.handDict[key] > 0:
+                return False
+        return True
+
     def __eq__(self, other):
         """
         Equality test, for testing purposes
@@ -100,7 +120,20 @@ class Hand(object):
         returns: True if this Hand contains the same number of each letter as
         the other Hand, False otherwise
         """
-        # TODO
+        otherHand = {}
+        for key in other.handDict:
+            otherHand[key] = other.handDict[key]
+        for key in otherHand:
+            if key in self.handDict:
+                if otherHand[key] != self.handDict[key]:
+                    return False
+        for key in self.handDict:
+            if key in otherHand:
+                if self.handDict[key] != otherHand[key]:
+                    return False
+        return True
+
+
     def __str__(self):
         """
         Represent this hand as a string
